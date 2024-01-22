@@ -1,72 +1,60 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.orm import validates
+from datetime import datetime
 
 db = SQLAlchemy()
 
-class Hero(db.Model):
-    __tablename__ = 'heros'
-
+class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name=db.Column(db.String,nullable=False)
-    super_name=db.Column(db.String)
-    created_at=db.Column(db.DateTime,server_default=db.func.now())
-    updated_at=db.Column(db.DateTime,onupdate=db.func.now())
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    address = db.Column(db.String(255))
 
-    hero_powers = db.relationship('HeroPowers', back_populates='hero')
-
-   
+    restaurant_pizzas = db.relationship('RestaurantPizza', backref='restaurant')
+    
     def __repr__(self):
-        return f'<Hero {self.name} {self.super_name}>'
-    
-class HeroPowers(db.Model):
-     __tablename__='hero_powers'
-     id = db.Column(db.Integer, primary_key=True)
-     strength=db.Column(db.String,nullable=False)
-     hero_id=db.Column(db.Integer,db.ForeignKey('heros.id'))
-     power_id=db.Column(db.Integer,db.ForeignKey('powers.id'))
-     created_at=db.Column(db.DateTime,server_default=db.func.now())
-     updated_at=db.Column(db.DateTime,onupdate=db.func.now())
+        return f'<Restaurant {self.id}: {self.name}'
 
-     
+    def validate(self):
+        errors = {}
 
+        if not self.name:
+            errors['name'] = 'Name is required'
 
-        
-    #defining the relationships
-     hero = db.relationship('Hero', back_populates='hero_powers')
-     power = db.relationship('Power', back_populates='hero_powers')
-    #validation for the strength
-     @validates('strength')
-     def validate_strength(self,key,strength):
-            valid_strengths = ['Strong', 'Weak', 'Average']
-            if strength not in valid_strengths:
-                raise ValueError(f"Strength must be one of: {', '.join(valid_strengths)}")
+        if len(self.name) > 50:
+            errors['name'] = 'Name must be less than 50 characters long'
 
-            return strength
-        
-     def __repr__(self):
-            return f'<Heropowers {self.strength} >'
-        
-class Power(db.Model):
-     __tablename__='powers'
-     id = db.Column(db.Integer, primary_key=True)
-     name=db.Column(db.String,nullable=False)
-     description=db.Column(db.String,nullable=False)
-     created_at=db.Column(db.DateTime,server_default=db.func.now())
-     updated_at=db.Column(db.DateTime,onupdate=db.func.now())
+        return errors
 
-    
-     hero_powers = db.relationship('HeroPowers', back_populates='power')
-#validation for the description
-     @validates('description')
-     def validate_description(self,key,description):
-      if len(description) < 20:
-         raise ValueError('description must be greater than 20 characters')
-      return description
-    
+class Pizza(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    ingredients = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-     def __repr__(self):
-        return f'<power {self.name} {self.description}>'
-    
+    restaurant_pizzas = db.relationship('RestaurantPizza', backref='pizza')
+
+    def __repr__(self):
+        return f'<Pizza {self.id}: {self.name}'
+
+class RestaurantPizza(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    price = db.Column(db.Integer)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
+    pizza_id = db.Column(db.Integer, db.ForeignKey('pizza.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
+    def __repr__(self):
+        return f'<RestaurantPizza {self.id}: Price: {self.price}>'
+
+    def validate(self):
+        errors = {}
+
+        if not self.price:
+            errors['price'] = 'Price is required'
+
+        if self.price < 1 or self.price > 30:
+            errors['price'] = 'Price must be between 1 and 30'
+
+        return errors

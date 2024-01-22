@@ -1,66 +1,82 @@
-from random import randint,choice as rc
-import random
 from faker import Faker
-
+from random import randint, choice
 from app import app
-from models import db,Power,Hero,HeroPowers
+from models import db, Restaurant, Pizza, RestaurantPizza
 
-fake=Faker()
+fake = Faker()
 
 with app.app_context():
-    #clearing the existing data
-    HeroPowers.query.delete()
-    Hero.query.delete()
-    Power.query.delete()
+    # Clear existing data
+    RestaurantPizza.query.delete()
+    Pizza.query.delete()
+    Restaurant.query.delete()
 
-#seeding hero
-    heros=[] #empty list to store the heros
-    for i in range(10):
-        b=Hero(name=fake.name(),
-                     super_name=fake.name())
-        heros.append(b)
-    
-    db.session.add_all(heros)
-    db.session.commit()
-    
-    #seeding powers
-    powers = []
-    power_data = [
-            ('Super Strength', 'This power grants immense physical strength.'),
-            ('Flight', 'The ability to soar through the skies at will.'),
-            ('Telekinesis', 'Move objects with the power of your mind.'),
-            ('Invisibility', 'Become invisible to the naked eye.'),
-            ('X-ray Vision', 'See through solid objects.'),
-            ('Fire Manipulation', 'Control and create fire at your will.'),
-            ('Ice Control', 'Command the power of ice and cold.'),
-            ('Time Travel', 'Travel through time and alter the past or future.'),
-            ('Teleportation', 'Instantly transport yourself to any location.'),
-            ('Mind Reading', 'Read the thoughts of others with ease.'),
-        ]
+    # Seeding the restaurants
+    restaurants = []
+    for _ in range(20):
+        restaurant = Restaurant(
+            name=fake.company(),
+            address=fake.address()
+        )
+        restaurants.append(restaurant)
 
-    for name, description in power_data:
-            power = Power(
-                name=name,
-                description=description,
-            )
-            powers.append(power)
-
-    db.session.add_all(powers)
+    db.session.add_all(restaurants)
     db.session.commit()
 
+    # Seeding the pizzas
+    pizzas = []
+    pizza_names = [
+        'Classic Margherita', 'Pepperoni Lover\'s', 'Vegetarian Delight', 'Supreme Feast',
+        'Mushroom Madness', 'BBQ Ranch Chicken', 'Spicy Sausage', 'Savory Seafood', 'Pesto Perfection',
+        'Buffalo Ranch', 'Ultimate Veggie', 'Quattro Formaggi', 'Carnivore\'s Dream',
+        'Plant-Based Bliss', 'Garlic White Pizza', 'Taco Fiesta', 'Greek Mediterranean', 'Sweet and Spicy BBQ',
+        'Bacon & Mushroom Deluxe', 'Spinach and Artichoke'
+    ]
 
- #seeding heropowers
-    heropowers=[] #empty list to store the heropowers
-    strength_names=['Strong', 'Weak', 'Average']
+    # List of pizza ingredients
+    pizza_ingredients = [
+        'Dough, Tomato Sauce, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Pepperoni, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Ham, Pineapple, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Mushrooms, Bell Peppers, Onions, Black Olives, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Pepperoni, Sausage, Mushrooms, Bell Peppers, Onions, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Mushrooms, Mozzarella Cheese',
+        'Dough, BBQ Sauce, Grilled Chicken, Red Onions, Cilantro, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Sausage, Pepperoni, Bacon, Ground Beef, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Shrimp, Calamari, Clams, Mozzarella Cheese',
+        'Dough, Pesto Sauce, Cherry Tomatoes, Fresh Basil, Mozzarella Cheese',
+        'Dough, Buffalo Sauce, Grilled Chicken, Red Onions, Ranch Drizzle, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Mushrooms, Bell Peppers, Spinach, Red Onions, Black Olives, Mozzarella Cheese',
+        'Dough, Alfredo Sauce, Ricotta Cheese, Parmesan Cheese, Mozzarella Cheese',
+        'Dough, Tomato Sauce, Pepperoni, Sausage, Bacon, Ham, Mozzarella Cheese',
+        'Dough, Vegan Tomato Sauce, Vegan Cheese, Mixed Vegetables',
+        'Dough, Garlic Alfredo Sauce, Spinach, Artichoke Hearts, Mozzarella Cheese',
+        'Dough, Taco Sauce, Seasoned Ground Beef, Tomatoes, Lettuce, Cheddar Cheese, Sour Cream',
+        'Dough, Tzatziki Sauce, Gyro Meat, Red Onions, Tomatoes, Feta Cheese, Kalamata Olives',
+        'Dough, BBQ Sauce, Grilled Chicken, Bacon, Red Onions, Pineapple, Mozzarella Cheese',
+        'Dough, BBQ Sauce, Ground Beef, Bacon, Red Onions, Pickles, Cheddar Cheese',
+        'Dough, Creamy Garlic Sauce, Spinach, Artichoke Hearts, Mozzarella Cheese'
+    ]
 
+     # Selecting unique pizza names
+    unique_pizza_names = list(set(pizza_names))
 
-    for i in range(10):
-        hero=rc(heros)
-        power=rc(powers)
-        b=HeroPowers(strength = random.choice(strength_names),hero=hero,power=power)
-        heropowers.append(b)
-    
-    db.session.add_all(heropowers)
+    for name in unique_pizza_names:
+        ingredients = choice(pizza_ingredients)  # Randomly select ingredients
+        pizza = Pizza(name=name, ingredients=ingredients)
+        pizzas.append(pizza)
+
+    db.session.add_all(pizzas)
     db.session.commit()
-    
-    print('seeding completed ')
+
+# Seeding restaurant pizzas
+    restaurant_pizzas = []
+    for _ in range(20):
+        price = randint(1, 30)
+        pizza = choice(pizzas)
+        restaurant = choice(restaurants)
+        random_pizza = RestaurantPizza(price=price, pizza=pizza, restaurant=restaurant)
+        restaurant_pizzas.append(random_pizza)
+
+    db.session.add_all(restaurant_pizzas)
+    db.session.commit()
