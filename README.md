@@ -1,72 +1,107 @@
-# Flask Code Challenge - Pizza Restaurants
+# Pizza Restaurants
 
-This is a Flask-based API that allows one to manage pizza restaurants and their associated pizzas. You can perform various operations, such as listing all restaurants, retrieving a specific restaurant and deleting restaurants, listing all pizzas, and creating restaurant pizzas.
+A simple restaurant React application, a flask application to test if API is working. 
 
-# Table of Contents
-1. Prerequisites
-2. Getting started
-3. Usage
-4. Database Models
-5. API endpoints
-6. License
-7. Author
+## Models
 
+You need to create the following relationships:
+- A `Restaurant` has many `Pizza`s through `RestaurantPizza`
+- A `Pizza` has many `Restaurant`s through `RestaurantPizza`
+- A `RestaurantPizza` belongs to a `Restaurant` and belongs to a `Pizza`
 
- # Prerequisites
-- Python 3.x
-- Flask
-- Flask-SQLAlchemy
-- Flask-Migrate
+## Validations
+Add validations to the `RestaurantPizza` model:
+- must have a `price` between 1 and 30
+Routes
+Set up the following routes. Make sure to return JSON data in the format specified along with the appropriate HTTP verb.
+ 
 
-# Getting started
-1. Clone this repository to your local machine
-2. Navigate to the project directory.
-3. Create a virtual environment:
+## GET /restaurants:
 
-       pipenv install
-4. Activate the virtual environment:
+Return JSON data in the format below:
+[
+  {
+    "id": 1,
+    "name": "Sottocasa NYC",
+    "address": "298 Atlantic Ave, Brooklyn, NY 11201"
+  },
+  {
+    "id": 2,
+    "name": "PizzArte",
+    "address": "69 W 55th St, New York, NY 10019"
+  }
+]
 
-       pipenv shell
-5. Initialize the SQLite database:
+## GET /restaurants/:id:
 
-       flask db init
-6. Apply the initial migration:
+If the `Restaurant` exists, return JSON data in the format below:
+{
+  "id": 1,
+  "name": "Sottocasa NYC",
+  "address": "298 Atlantic Ave, Brooklyn, NY 11201",
+  "pizzas": [
+    {
+      "id": 1,
+      "name": "Cheese",
+      "ingredients": "Dough, Tomato Sauce, Cheese"
+    },
+    {
+      "id": 2,
+      "name": "Pepperoni",
+      "ingredients": "Dough, Tomato Sauce, Cheese, Pepperoni"
+    }
+  ]
+}
 
-       flask db migrate
-7. Upgrade the database:
+If the `Restaurant` does not exist, return the following JSON data, along with the appropriate HTTP status code:
+{
+  "error": "Restaurant not found"
+}
+ 
 
-       flask db upgrade
+## DELETE /restaurants/:id:
 
-# Usage
-To start the Flask application run:
+If the `Restaurant` exists, it should be removed from the database, along with any `RestaurantPizza`s that are associated with it (a `RestaurantPizza` belongs to a `Restaurant`, so you need to delete the `RestaurantPizza`s before the `Restaurant` can be deleted).
+After deleting the `Restaurant`, return an _empty_ response body, along with the appropriate HTTP status code.
 
-     flask run
+If the `Restaurant` does not exist, return the following JSON data, along with the appropriate HTTP status code:
+{
+  "error": "Restaurant not found"
+}
+ 
 
-# Database Models
+## GET /pizzas:
 
-This code challenge includes three database models:
+Return JSON data in the format below:
+[
+  {
+    "id": 1,
+    "name": "Cheese",
+    "ingredients": "Dough, Tomato Sauce, Cheese"
+  },
+  {
+    "id": 2,
+    "name": "Pepperoni",
+    "ingredients": "Dough, Tomato Sauce, Cheese, Pepperoni"
+  }
+]
 
-- **Restaurant**: Represents a pizza restaurant.
-- **Pizza**: Represents a type of pizza.
-- **RestaurantPizza**: Represents the relationship between a restaurant and a pizza, including the price.     
+## POST /restaurant_pizzas:
 
-# API Endpoints
+This route should create a new `RestaurantPizza` that is associated with an existing `Pizza` and `Restaurant`. It should accept an object with the following properties in the body of the request:
+{
+  "price": 5,
+  "pizza_id": 1,
+  "restaurant_id": 3
+}
 
-The API provides the following routes to interact with the models:
-
-- **GET /restaurants**: List all restaurants.
-
-- **GET /restaurants/int:id**: Retrieve a specific restaurant by ID. Returns detailed information about the restaurant and the associated pizzas.
-
-- **DELETE /restaurants/int:id**: Delete a specific restaurant by ID. Deletes the restaurant and any associated restaurant pizzas.
-
-- **GET /pizzas**: List all pizzas
-
-- **POST /restaurant_pizzas**: Create a new restaurant pizza. Associates an existing pizza with an existing restaurant and sets the price.
-
-# License
-
-This project is licensed under the MIT License.
-
-# Author
-Daniel Mararo (Software Engineer)
+If the `RestaurantPizza` is created successfully, send back a response with the data related to the `Pizza`:
+{
+  "id": 1,
+  "name": "Cheese",
+  "ingredients": "Dough, Tomato Sauce, Cheese"
+}
+If the `RestaurantPizza` is **not** created successfully, return the following JSON data, along with the appropriate HTTP status code:
+{
+  "errors": ["validation errors"]
+}
