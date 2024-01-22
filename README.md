@@ -6,7 +6,8 @@ The Flask Code Challenge - Superheroes is an API for tracking heroes and their s
 
 ## Author
 
-- Author: Daniel Mararo
+- Abdullahi Ahmed 
+-Email: ahmedyussuf917@gmail.com
 
 ## License
 
@@ -202,5 +203,6 @@ json
   ]<br>
 }<br>
 
-### contact
-You can reach me via email <danielmararo1@gmail.com>
+# License
+
+This project is licensed under the [MIT License].
