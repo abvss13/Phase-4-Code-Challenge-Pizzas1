@@ -1,190 +1,206 @@
+# Flask PROJECT- Superheroes
 
-**Pizza Restaurant API - Flask Backend**
+## Project Description
+
+The Flask Code Challenge - Superheroes is an API for tracking heroes and their superpowers. This project provides a Flask-based backend application with a React frontend to facilitate testing the API's functionality. The goal is to implement various features within the Flask API as outlined in the deliverables section below.
+
+## Author
+
+- Author: Daniel Mararo
+
+## License
+
+This project is licensed under the [MIT License](LICENSE.md).
+
+## Setup
+
+To get started with this project, follow the setup instructions below:
+
+### Backend Setup
+
+1. Install backend dependencies using Pipenv:
 
 
-This is a Flask backend API for managing Pizza Restaurants. It provides endpoints to interact with restaurant, pizza, and pizza-restaurant relationship data.
+   pipenv install 
 
-**Table of Contents**
+2. Run database migrations:
 
-Models
-Validations
-Routes
-Project Setup
-Usage
-Project Submission
-Contributing
-License
-Models
+   flask db upgrade
 
-**Relationships:**
-A Restaurant has many Pizzas through RestaurantPizza.
-A Pizza has many Restaurants through RestaurantPizza.
-A RestaurantPizza belongs to a Restaurant and belongs to a Pizza.
+3. Seed the database with initial data:
 
-**Validations:**
-Add validations to the RestaurantPizza model:
 
-Must have a price between 1 and 30.
+   python app/seed.py
 
-**Routes**
+4. Run the Flask API on localhost:5555:
 
-GET /restaurants
-Return JSON data containing a list of restaurants:
+   python app.py
 
-json
-Copy code
-[
-  {
-    "id": 1,
-    "name": "Sottocasa NYC",
-    "address": "298 Atlantic Ave, Brooklyn, NY 11201"
-  },
-  {
-    "id": 2,
-    "name": "PizzArte",
-    "address": "69 W 55th St, New York, NY 10019"
-  }
-]
-GET /restaurants/:id
-If the Restaurant exists, return JSON data containing details:
+### Frontend Setup
 
-json
+   1. Install frontend dependencies using npm:
 
-{
-  "id": 1,
-  "name": "Sottocasa NYC",
-  "address": "298 Atlantic Ave, Brooklyn, NY 11201",
-  "pizzas": [
-    {
-      "id": 1,
-      "name": "Cheese",
-      "ingredients": "Dough, Tomato Sauce, Cheese"
-    },
-    {
-      "id": 2,
-      "name": "Pepperoni",
-      "ingredients": "Dough, Tomato Sauce, Cheese, Pepperoni"
-    }
-  ]
-}
-If the Restaurant does not exist, return:
+    npm install --prefix client
 
-json
+   2. Run the React app on localhost:4000:
 
-{
-  "error": "Restaurant not found"
-}
-DELETE /restaurants/:id
-If the Restaurant exists, remove it from the database, along with any associated RestaurantPizzas. After deletion, return an empty response body.
+    npm start --prefix client
 
-If the Restaurant does not exist, return:
+### Testing
 
-json
+You can test your progress using one of the following methods:
 
-{
-  "error": "Restaurant not found"
-}
-GET /pizzas
-Return JSON data containing a list of pizzas:
+
+    Interact with the API using the React frontend application. 
+    
+    Use Postman to make requests to the Flask API.
+
+### Models
+
+The project requires creating the following relationships:
+
+    A Hero has many Powers through HeroPower.
+    A Power has many Heros through HeroPower.
+    A HeroPower belongs to a Hero and belongs to a Power.
+
+
+### Validations
+
+The project includes the following validations:
+HeroPower Model
+
+    strength must be one of the following values: 'Strong', 'Weak', 'Average'.
+
+Power Model
+
+    description must be present and at least 20 characters long.
+
+### Routes
+
+The following routes have been set up in the project. JSON data should be returned in the specified format along with the appropriate HTTP verb.
+
+### GET /heroes
+
+Returns JSON data with hero information in the format:
 
 json
 
 [
-  {
-    "id": 1,
-    "name": "Cheese",
-    "ingredients": "Dough, Tomato Sauce, Cheese"
-  },
-  {
-    "id": 2,
-    "name": "Pepperoni",
-    "ingredients": "Dough, Tomato Sauce, Cheese, Pepperoni"
-  }
+  { "id": 1, "name": "Kamala Khan", "super_name": "Ms. Marvel" },
+  { "id": 2, "name": "Doreen Green", "super_name": "Squirrel Girl" },
+  { "id": 3, "name": "Gwen Stacy", "super_name": "Spider-Gwen" }
 ]
-POST /restaurant_pizzas
-Create a new RestaurantPizza associated with an existing Pizza and Restaurant. Accept an object with the following properties in the request body:
+
+### GET /heroes/:id
+
+    If the Hero exists, returns JSON data in the format below:
 
 json
 
 {
-  "price": 5,
-  "pizza_id": 1,
-  "restaurant_id": 3
-}
-If the RestaurantPizza is created successfully, send back a response with the data related to the Pizza:
+  "id": 1,<br>
+  "name": "Kamala Khan",<br>
+  "super_name": "Ms. Marvel", <br>
+  "powers": [<br>
+    {<br>
+      "id": 1,<br>
+      "name": "super strength",<br>
+      "description": "gives the wielder <br>super-human strengths"
+    },<br>
+ 
+  ]<br>
+}<br>
+
+### GET /powers
+
+Returns JSON data with power information in the format:
+
+json
+
+[
+  {
+    "id": 1,<br>
+    "name": "super strength",<br>
+    "description": "gives the wielder super-human strengths"<br>
+  },<br>
+  {<br>
+    "id": 2,<br>
+    "name": "flight",<br>
+    "description": "gives the wielder the ability to fly through the skies at supersonic speed"<br>
+  }<br>
+]<br>
+
+### GET /powers/:id
+
+    If the Power exists, returns JSON data in the format below:
 
 json
 
 {
-  "id": 1,
-  "name": "Cheese",
-  "ingredients": "Dough, Tomato Sauce, Cheese"
-}
-If the RestaurantPizza is not created successfully, return:
+  "id": 1,<br>
+  "name": "super strength",<br>
+  "description": "gives the wielder super-human strengths"<br>
+}<br>
+
+    If the Power does not exist, returns JSON data with an error message and the appropriate HTTP status code.
+
+### PATCH /powers/:id
+
+    This route updates an existing Power. It accepts an object with the following properties in the body of the request:
 
 json
 
 {
-  "errors": ["validation errors"]
+  "description": "Updated description"<br>
 }
-**Project Setup**
-**Clone the repository:**
 
-bash
+    If the Power exists and is updated successfully (passes validations), it updates the description and returns JSON data in the format below:
 
-git clone https://github.com/your-username/pizza-restaurant-api.git
-**Change into the project directory:**
+json
 
-bash
+{
+  "id": 1,<br>
+  "name": "super strength",<br>
+  "description": "Updated description"<br>
+}
 
-cd pizza-restaurant-api
-Install dependencies:
+    If the Power does not exist, returns JSON data with an error message and the appropriate HTTP status code.
 
-bash
+    If the Power is not updated successfully (does not pass validations), returns JSON data with an error message and the appropriate HTTP status code.
 
-pip install -r requirements.txt
-Set up your database. Update the config.py file with your database configurations.
+### POST /hero_powers
 
-Apply database migrations:
+    This route creates a new HeroPower associated with an existing Power and Hero. It accepts an object with the following properties in the body of the request:
 
-bash
+json
 
-flask db init
-flask db migrate
-flask db upgrade
-**Run the Flask application:**
+{
+  "strength": "Average",<br>
+  "power_id": 1,<br>
+  "hero_id": 3<br>
+}
 
-bash
+    If the HeroPower is created successfully, it sends back a response with data related to the Hero.
 
-flask run
-The API should now be running at http://localhost:5000.
+json
 
-**Usage**
-Use the provided routes to interact with the API, e.g., use a tool like curl or Postman to make requests.
+{
+  "id": 1,<br>
+  "name": "Kamala Khan",<br>
+  "super_name": "Ms. Marvel",<br>
+  "powers": [<br>
+    {<br>
+      "id": 1,<br>
+      "name": "super strength",<br>
+      "description": "gives the wielder super-human strengths"<br>
+    },<br>
+    {<br>
+      "id": 2,<br>
+      "name": "flight",<br>
+      "description": "gives the wielder the ability to fly through the skies at supersonic speed"<br>
+    }<br>
+  ]<br>
+}<br>
 
-Integrate the API with a React frontend for a fully functional application.
-
-**Project Submission**
-Create a private repository on GitHub.
-
-Add your TM as a collaborator for grading and review.
-
-Push your code to the repository.
-
-Submit the link to the repository.
-
-**Contributing**
-If you'd like to contribute to this project, please follow these guidelines:
-
-Fork the repository.
-
-Create a new branch for your feature: git checkout -b feature-name.
-
-Make your changes and commit them: git commit -m 'Add new feature'.
-
-Push to the branch: git push origin feature-name.
-
-Create a pull request.
-
-**License**
-This project is licensed under the MIT License - see the LICENSE file for details.
+### contact
+You can reach me via email <danielmararo1@gmail.com>
