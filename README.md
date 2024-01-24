@@ -1,10 +1,13 @@
 # Pizza Restaurant App
 
 This is a web application for managing pizza restaurants, pizzas, and their prices.
+### Author
+ Abdullahi Yussuf
+ email:ahmedyussuf917@gmail.com
 # Frontend link 
-https://65b0db59a7302c6629c3b754--clever-llama-0d503d.netlify.app/
+https://stellular-pixie-53d755.netlify.app
 # Backend link
-https://pizza-restaurant-buse.onrender.com/
+https://burhan95220-phase-4-code-challenge-pizzas.onrender.com
 
 
 ## Introduction
@@ -40,8 +43,8 @@ This web application provides a platform to manage pizza restaurants and their m
 1. Clone the repository:
 
    ```bash
-   git clone <repository_url>
-   cd pizza-restaurant-app
+   git clone git@github.com:burhan9520/Phase-4-Code-Challenge-Pizzas.git
+   cd pizza-Code-challenge
 2. Set up the Python environment:
     python -m venv venv
     source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
