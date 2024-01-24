@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './App.css'; // Import your CSS file
 
 export default function RestaurantPizzaForm() {
   const [restaurants, setRestaurants] = useState([]);

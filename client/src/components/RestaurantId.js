@@ -16,7 +16,7 @@ export default function RestaurantId() {
   .then((r) => r.json())
   return (
     <div>
-      <h2>Welcome To:{restaurant.name}</h2>
+      <h2>Welcome to:{restaurant.name}</h2>
       <h3>List of Pizzas Available in our restaurant:</h3>
       <ul>
         {restaurant.restaurant_pizzas &&
