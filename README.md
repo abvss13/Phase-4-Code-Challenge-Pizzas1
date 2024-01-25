@@ -170,8 +170,6 @@ If the `RestaurantPizza` is **not** created successfully, return the following J
 4. GET /pizzas: Get a list of pizzas.
 5. POST /restaurant_pizzas: Create a new restaurant-pizza association.
 
-### Author
- Tabitha L
 
 ### Licence
   This project is licensed under the MIT License .
