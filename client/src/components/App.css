@@ -1,3 +1,11 @@
+:root {
+  --primary-color: #4CAF50; /* Green */
+  --highlight-color: #607D8B; /* Grey */
+  --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  --background-color: #fff; /* White */
+  --text-color: #333; /* Black */
+}
+
 /* Reset some default styles */
 body {
   margin: 0;
@@ -10,7 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: var(--background-color);
   min-height: 100vh;
 }
 
@@ -33,7 +41,7 @@ main {
 nav {
   display: flex;
   justify-content: space-around;
-  background-color: #333;
+  background-color: var(--primary-color);
   color: white;
   padding: 10px;
 }
@@ -46,58 +54,27 @@ nav a {
 }
 
 nav a:hover {
-  color: #ffcc00; /* Highlight color on hover */
+  color: var(--highlight-color); /* Highlight color on hover */
 }
 
-/* Restaurant List Styles */
-.Restaurant {
-  background-color: #fff;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Restaurant Pizza Form Styles */
-.RestaurantPizzaForm {
-  background-color: #fff;
-  border-radius: 8px;
-  margin: 20px 0;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Pizza Details Styles */
-.Pizza {
-  background-color: #fff;
-  border-radius: 8px;
-  margin: 20px 0;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Restaurant Details Styles */
-.RestaurantId {
-  background-color: #fff;
-  border-radius: 8px;
-  margin: 20px 0;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Add New RestaurantPizza Styles */
+/* Common Styles for Multiple Components */
+.Restaurant,
+.RestaurantPizzaForm,
+.Pizza,
+.RestaurantId,
 .AddNewPizzaForm {
-  background-color: #fff;
+  background-color: var(--background-color);
   border-radius: 8px;
   margin: 20px 0;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
 }
 
 /* Form Label Styles */
 .form-label {
   display: block;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 /* Form Select and Input Styles */
@@ -106,13 +83,13 @@ nav a:hover {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--highlight-color);
   border-radius: 4px;
 }
 
 /* Form Button Styles */
 .form-button {
-  background-color: #333;
+  background-color: var(--primary-color);
   color: white;
   padding: 10px 15px;
   border: none;
@@ -122,5 +99,12 @@ nav a:hover {
 
 /* Form Button Hover Effect */
 .form-button:hover {
-  background-color: #555;
+  background-color: var(--highlight-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  main {
+    width: 90%;
+  }
 }
